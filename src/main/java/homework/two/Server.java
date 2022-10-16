@@ -15,41 +15,43 @@ public class Server {
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true) {
-                try {
-                    Socket clientSoсket = serverSocket.accept();
-                    DataOutputStream out = new DataOutputStream(clientSoсket.getOutputStream());
-                    DataInputStream in = new DataInputStream(clientSoсket.getInputStream());
-                    System.out.printf("Новое подключение установлено");
+                try (
+                        Socket clientSoсket = serverSocket.accept();
+                        PrintWriter out = new PrintWriter(clientSoсket.getOutputStream(), true);
+                        BufferedReader in = new BufferedReader(new InputStreamReader(clientSoсket.getInputStream()))) {
+
+                    System.out.printf("Новое подключение установлено " +
+                            clientSoсket.getInetAddress().getHostAddress()
+                            + ":" + serverSocket.getLocalPort());
 
                     while (!clientSoсket.isClosed()) {
-                        out.writeUTF("Введите Ваш возраст.");
-                        String age = in.readUTF();
+                        out.println(String.format("Введите Ваш возраст."));
+                        System.out.println("Ждем ответа от пользователя");
+                        final String age = in.readLine();
                         if (Integer.parseInt(age) < 18) {
-                            out.writeUTF("Вы не проходите по возрасту. Пока-пока");
-                            out.flush();
+                            out.println("Вы не проходите по возрасту. Пока-пока");
+                            in.close();
+                            out.close();
                             clientSoсket.close();
                             break;
                         }
 
-                        out.writeUTF("Введите Ваше ФИО");
-                        String[] name = in.readUTF().split(" ");
-                        out.writeUTF("Здравствуйте! " + Arrays.toString(name)
+                        out.println("Введите Ваше ФИО");
+                        String[] name = in.readLine().split(" ");
+                        out.println("Здравствуйте! " + Arrays.toString(name)
                                 .replaceAll("^\\[|\\,|\\]$", ""));
-                        out.writeUTF("Введите страну проживания");
-                        String country = in.readUTF();
-                        out.writeUTF("host: " + clientSoсket.getInetAddress().getHostAddress()
-                                + " " + "port: " + serverSocket.getLocalPort());
-                        out.writeUTF("Для выхода введите \"exit\". Продолжить - любая клавиша");
-                        if (in.readUTF().equals("exit")) {
-                            out.writeUTF("Программа работы сервера завершена");
-                            out.close();
+                        out.println("Введите страну проживания");
+                        String country = in.readLine();
+                        System.out.println("страна проживания " + country);
+                        out.println("Для выхода введите \"exit\". Продолжить - любая клавиша");
+                        if (in.readLine().equals("exit")) {
+                            out.println("Клиент заверил общение с сервером");
                             in.close();
+                            out.close();
                             clientSoсket.close();
                             break;
                         }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         }
