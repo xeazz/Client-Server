@@ -38,14 +38,14 @@ public class Server {
 
                         out.println("Введите Ваше ФИО");
                         String[] name = in.readLine().split(" ");
-                        out.println("Здравствуйте! " + Arrays.toString(name)
-                                .replaceAll("^\\[|\\,|\\]$", ""));
+                        out.println("Здравствуйте, " + (Arrays.toString(name)
+                                .replaceAll("^\\[|\\,|\\]$", "")) + "!");
                         out.println("Введите страну проживания");
                         String country = in.readLine();
                         System.out.println("страна проживания " + country);
                         out.println("Для выхода введите \"exit\". Продолжить - любая клавиша");
                         if (in.readLine().equals("exit")) {
-                            out.println("Клиент заверил общение с сервером");
+                            out.println("Вы завершили общение с сервером");
                             in.close();
                             out.close();
                             clientSoсket.close();

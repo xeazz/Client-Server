@@ -22,9 +22,7 @@ public class Client {
                 if (Integer.parseInt(a) < 18) {
                     String warning = in.readLine();
                     System.out.println(warning);
-                    in.close();
-                    out.close();
-                    clientSocket.close();
+                    break;
                 }
                 String name = in.readLine();
                 System.out.println(name);
@@ -43,9 +41,7 @@ public class Client {
                 if (answer.equals("exit")) {
                     String answerSecond = in.readLine();
                     System.out.println(answerSecond);
-                    in.close();
-                    out.close();
-                    clientSocket.isClosed();
+                    break;
                 } else {
                     System.out.println("Вы решили продолжить общение с сервером");
                 }
