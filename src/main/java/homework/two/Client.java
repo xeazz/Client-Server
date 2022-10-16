@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) throws IOException {
-        String host = "127.0.0.1";
+        String host = "netology.homework";
         int port = 5587;
         try (Socket clientSocket = new Socket(host, port);
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
